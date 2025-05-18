@@ -237,6 +237,20 @@ app.get('/getCommunityDetails', async (req, res) => {
   }
 });
 
+app.post('/uploadText', async (req, res) => {
+  const { text } = req.body;
+  if (!text) {
+    return res.status(400).json({ message: 'Text is required' });
+  }
+  try {
+    await pool.query('INSERT INTO extracted_data (text_content) VALUES ($1)', [text]);
+    res.status(200).json({ message: 'Text inserted successfully' });
+  } catch (err) {
+    console.error('DB error:', err);
+    res.status(500).json({ message: 'Database error', error: err.message });
+  }
+});
+
 
 
 
